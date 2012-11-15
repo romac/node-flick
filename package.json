@@ -23,5 +23,14 @@
     "connect": "~2.7.0",
     "async": "~0.1.22",
     "shelljs": "0.0.8"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "supertest": "0.0.1"
+  },
+  "scripts": {
+    "prepublish" : "npm prune",
+    "test": "make test"
   }
 }
