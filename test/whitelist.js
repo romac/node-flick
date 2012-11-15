@@ -50,10 +50,12 @@ describe( 'whitelist', function()
                         }
                     };
 
-                if( addresses[ type ] ) {
+                if( addresses[ type ] )
+                {
                     _req.socket.remoteAddress = addresses[ type ];
                 }
-                else {
+                else
+                {
                     _req.socket.remoteAddress = type;
                 }
 
