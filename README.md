@@ -1,4 +1,6 @@
 
+[![Build Status](https://secure.travis-ci.org/romac/node-bait.png?branch=master)](https://travis-ci.org/romac/node-bait)
+
 # Bait
 
 Bait is a [post-receive hooks](https://help.github.com/articles/post-receive-hooks) handler for Node.js.
