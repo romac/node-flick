@@ -37,7 +37,7 @@ describe( 'payload', function()
         it( 'should error if there is no POST argument named "payload', function( done )
         {
             var _payload = payload(),
-                req = { method: 'POST', body: { params: {} } },
+                req = { method: 'POST', body: {} },
                 next = function( err )
                 {
                     should.exist( err );
@@ -55,7 +55,7 @@ describe( 'payload', function()
          it( 'should work if there is a POST argument named "payload', function( done )
         {
             var _payload = payload(),
-                req = { method: 'POST', body: { payload: 'Hello, World' } },
+                req = { method: 'POST', body: { payload: '"Hello, World"' } },
                 next = function( err )
                 {
                     should.not.exist( err );
@@ -68,7 +68,7 @@ describe( 'payload', function()
         it( 'should error if there is no POST argument whose name has been configured', function( done )
         {
             var _payload = payload( 'checkforme' ),
-                req = { method: 'POST', body: { payload: 'Hello, World' } },
+                req = { method: 'POST', body: { payload: '"Hello, World"' } },
                 next = function( err )
                 {
                     should.exist( err );
@@ -86,7 +86,7 @@ describe( 'payload', function()
         it( 'should work if there is a POST argument whose name has been configured', function( done )
         {
             var _payload = payload( 'checkforme' ),
-                req = { method: 'POST', body: { checkforme: 'Hello, World' } },
+                req = { method: 'POST', body: { checkforme: '"Hello, World"' } },
                 next = function( err )
                 {
                     should.not.exist( err );
