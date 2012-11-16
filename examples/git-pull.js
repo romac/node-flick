@@ -1,22 +1,20 @@
 
 var connect = require( 'connect' ),
     flick = require( '..' ),
+    handler = flick(),
     app = connect();
 
-var actions = {
-        'romac/romac.github.com': flick.actions.gitPull( {
-            root: '/var/www/romac.me',
-            rebase: true
-        } )
-    },
-    handler = flick.handler( {
-        whitelist: {
-            ips: [ '127.0.0.1' ]
-        },
-        actions: actions
-    } );
+handler.use( 'romac/romac.github.com', gitPull );
+
+function gitPull( req, res, next )
+{
+    console.log( req.flick );
+    next();
+}
 
 app.use( connect.bodyParser() );
+app.use( flick.whitelist( { local: true } ) );
+app.use( flick.payload() );
 app.use( handler );
 app.use( function( req, res )
 {
