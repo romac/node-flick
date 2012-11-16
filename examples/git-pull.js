@@ -1,15 +1,26 @@
 
 var connect = require( 'connect' ),
+    shell = require( 'shelljs' ),
     flick = require( '..' ),
     handler = flick(),
     app = connect();
 
-handler.use( 'romac/romac.github.com', gitPull );
+handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: true } ) );
 
-function gitPull( req, res, next )
+function gitPull( root, options )
 {
-    console.log( req.flick );
-    next();
+    return function( req, res, next )
+    {
+        var cmd = 'git pull' + ( options.rebase ? ' --rebase' : '' );
+
+        shell.cd( root );
+        shell.exec( cmd, function( code, output )
+        {
+            console.log( cmd ' exited with code ' + code );
+        } );
+
+        next();
+    };
 }
 
 app.use( connect.bodyParser() );
