@@ -2,7 +2,7 @@
 var fs = require( 'fs' ),
     basename = require( 'path' ).basename;
 
-// Awesome snippet from https://github.com/senchalabs/connect/blob/master/lib/connect.js#L87
+// https://github.com/senchalabs/connect/blob/master/lib/connect.js#L87
 // by TJ Holowaychuk
 fs.readdirSync( __dirname + '/lib' ).forEach( function( filename )
 {
