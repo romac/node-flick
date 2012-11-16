@@ -24,9 +24,20 @@ function gitPull( root, options )
 }
 
 app.use( connect.bodyParser() );
+
+// 1.
 app.use( flick.whitelist( { local: true } ) );
 app.use( flick.payload() );
 app.use( handler );
+
+// 2.
+// handler.use( flick.whitelist( { local: true } ) );
+// handler.use( flick.payload() );
+// app.use( handler );
+
+// 3.
+// app.use( flick.default() );
+
 app.use( function( req, res )
 {
     res.writeHead( 200 );
