@@ -2,7 +2,9 @@
 var fs = require( 'fs' ),
     basename = require( 'path' ).basename,
     proto = require( './lib/handler' ),
-    utils = require( './utils' );
+    utils = require( './utils' ),
+    payload = require( './lib/payload' );
+    whitelist = require( './lib/whitelist' );
 
 // All of this is obviously inspired by connect: https://github.com/senchalabs/connect
 // Since flick integrates with it, I figured it'd be a good idea
@@ -29,13 +31,13 @@ function defaultHandler()
 {
     var handler = createHandler();
 
-    handler.use( flick.whitelist() );
-    handler.use( flick.payload() );
+    handler.use( whitelist() );
+    handler.use( payload() );
 
     return handler;
 }
 
 exports.default = defaultHandler;
 
-exports.payload = require( './lib/payload' );
-exports.whitelist = require( './lib/whitelist' );
+exports.payload = payload;
+exports.whitelist = whitelist;
