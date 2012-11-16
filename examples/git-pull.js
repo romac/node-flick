@@ -1,15 +1,15 @@
 
 var connect = require( 'connect' ),
-    bait = require( '..' ),
+    flick = require( '..' ),
     app = connect();
 
 var actions = {
-        'romac/romac.github.com': bait.actions.gitPull( {
+        'romac/romac.github.com': flick.actions.gitPull( {
             root: '/var/www/romac.me',
             rebase: true
         } )
     },
-    handler = bait.handler( {
+    handler = flick.handler( {
         whitelist: {
             ips: [ '127.0.0.1' ]
         },
@@ -25,4 +25,4 @@ app.use( function( req, res )
 } );
 
 app.listen( 4001 );
-console.log( 'bait is listening on port 4001' );
+console.log( 'flick is listening on port 4001' );
