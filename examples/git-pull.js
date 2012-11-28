@@ -1,11 +1,12 @@
+
+// First, import everything we need (I assume that you installed Flick via the above command).
 var connect = require( 'connect' ),
     shell = require( 'shelljs' ),
     flick = require( '..' ),
     handler = flick(),
     app = connect();
 
-handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: true } ) );
-
+// Then, define the action to run once we'll receive the notification from GitHub.
 function gitPull( root, options )
 {
     return function( req, res, next )
@@ -22,21 +23,21 @@ function gitPull( root, options )
     };
 }
 
+// tell Flick to run that action everytime we receive a notification for a specific repository.
+handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: true } ) );
+
 app.use( connect.bodyParser() );
 
-// 1.
+// Ensure only requests from GitHub or, in that case, the same computer will get processed.
 app.use( flick.whitelist( { local: true } ) );
+
+// Parse the payload we get from GitHub
 app.use( flick.payload() );
+
+// Supply it to Flick's handler
 app.use( handler );
 
-// 2.
-// handler.use( flick.whitelist( { local: true } ) );
-// handler.use( flick.payload() );
-// app.use( handler );
-
-// 3.
-// app.use( flick.default() );
-
+// Thank GitHub for their niceness
 app.use( function( req, res )
 {
     res.writeHead( 200 );
