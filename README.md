@@ -15,7 +15,7 @@ Since it's not finished yet, Flick is not in the NPM registry. But you can insta
 
 ## Usage
 
-Let's you want to run `git pull --rebase` on a repository clone every time commits are pushed to GitHub.
+Let's say you want to run `git pull --rebase` on a repository clone every time commits are pushed to GitHub.
 
 First, import everything we need (this assumes that you installed Flick via the above command).
 
