@@ -11,7 +11,7 @@ describe( 'flick()', function() {
     handler.should.have.property( 'repository' );
     handler.should.have.property( 'stack' );
   } );
-  describe( 'handler.use()', function() {
+  describe( 'handler.use( repository, fn )', function() {
     it( 'should be a function and take 2 arguments', function() {
       var handler = flick();
       handler.use.should.be.a( 'function' ).with.lengthOf( 2 );
@@ -37,7 +37,7 @@ describe( 'flick()', function() {
       handler.stack[ 0 ].handle.should.be.equal( fn );
     } );
   } );
-  describe( 'handler.handle()', function() {
+  describe( 'handler.handle( req, res, next )', function() {
     function _req( owner, repo ) {
       return {
         payload: {
