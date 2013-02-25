@@ -14,8 +14,7 @@ function gitPull( root, options )
         var cmd = 'git pull' + ( options.rebase ? ' --rebase' : '' );
 
         shell.cd( root );
-        shell.exec( cmd, function( code, output )
-        {
+        shell.exec( cmd, function( code, output ) {
             console.log( cmd + ' exited with code ' + code );
         } );
 
@@ -38,8 +37,7 @@ app.use( flick.payload() );
 app.use( handler );
 
 // Thank GitHub for their niceness
-app.use( function( req, res )
-{
+app.use( function( req, res ) {
     res.writeHead( 200 );
     res.end( 'Thank you, dear friend.\n' );
 } );

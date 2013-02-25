@@ -32,13 +32,11 @@ Then, define the action to run once we'll receive the notification from GitHub.
 ```js
 function gitPull( root, options )
 {
-    return function( req, res, next )
-    {
+    return function( req, res, next ) {
         var cmd = 'git pull' + ( options.rebase ? ' --rebase' : '' );
 
         shell.cd( root );
-        shell.exec( cmd, function( code, output )
-        {
+        shell.exec( cmd, function( code, output ) {
             console.log( cmd + ' exited with code ' + code );
         } );
 
@@ -72,8 +70,7 @@ Launch the HTTP server.
 
 ```js
 // Thank GitHub for their niceness
-app.use( function( req, res )
-{
+app.use( function( req, res ) {
     res.writeHead( 200 );
     res.end( 'Thank you, dear friend.\n' );
 } );
