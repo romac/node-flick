@@ -22,7 +22,7 @@ First, import everything we need (this assumes that you installed Flick via the 
 ```js
 var connect = require( 'connect' ),
     shell = require( 'shelljs' ),
-    flick = require( 'flick ),
+    flick = require( 'flick' ),
     handler = flick(),
     app = connect();
 ```
