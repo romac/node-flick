@@ -2,13 +2,13 @@
 
 # Flick
 
-Flick is a [post-receive hooks](https://help.github.com/articles/post-receive-hooks) handler for Node.js.
+Flick is a [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks) handler for Node.js.
 
 ## Installation
 
-Flick is not in the NPM registry yet. But you can install the latest version by running
+Install the latest version by running
 
-    $ npm install https://github.com/romac/node-flick/archive/master.tar.gz
+    $ npm install flick
 
 ## Usage
 
