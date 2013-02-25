@@ -14,7 +14,7 @@ Install the latest version by running
 
 Let's say you want to run `git pull --rebase` on a repository clone every time commits are pushed to GitHub.
 
-First, import everything we need (this assumes that you installed Flick via the above command).
+First, import everything we need (this assumes that you installed node-flick via the above command).
 
 ```js
 var connect = require( 'connect' ),
@@ -59,7 +59,7 @@ app.use( flick.whitelist( { local: true } ) );
 // Parse the payload we get from GitHub
 app.use( flick.payload() );
 
-// Supply it to Flick's handler
+// Supply it to node-flick's handler
 app.use( handler );
 ```
 
