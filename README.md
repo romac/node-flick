@@ -1,4 +1,3 @@
-
 [![Build Status](https://secure.travis-ci.org/romac/node-flick.png?branch=master)](https://travis-ci.org/romac/node-flick)
 
 # Flick
@@ -56,7 +55,7 @@ Let's then configure connect.
 ```js
 app.use( connect.bodyParser() );
 
-// Ensure only requests from GitHub or, in that case, the same computer will get processed.
+// Ensure only requests from GitHub (or, in that case, the same computer) will get processed.
 app.use( flick.whitelist( { local: true } ) );
 
 // Parse the payload we get from GitHub
