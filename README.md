@@ -1,8 +1,8 @@
 [![Build Status](https://secure.travis-ci.org/romac/node-flick.png?branch=master)](https://travis-ci.org/romac/node-flick)
 
-# Flick
+# node-flick
 
-Flick is a [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks) handler for Node.js.
+node-flick is a [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks) handler for Node.js.
 
 ## Installation
 
@@ -42,7 +42,7 @@ function gitPull( root, options )
 }
 ```
 
-Tell Flick to run that action everytime we receive a notification for a specific repository.
+Tell node-flick to run that action everytime we receive a notification for a specific repository.
 
 ```js
 handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: true } ) );
@@ -86,4 +86,4 @@ From now on, everytime you will push something to GitHub, the handler above will
 
 ## License
 
-Flick is released under the [MIT License](http://romac.mit-license.org).
+node-flick is released under the [MIT License](http://romac.mit-license.org).
