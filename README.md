@@ -6,7 +6,7 @@ Flick is a [post-receive hooks](https://help.github.com/articles/post-receive-ho
 
 ## Installation
 
-Since it's not finished yet, Flick is not in the NPM registry. But you can install the latest version by running
+Flick is not in the NPM registry yet. But you can install the latest version by running
 
     $ npm install https://github.com/romac/node-flick/archive/master.tar.gz
 
