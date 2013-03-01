@@ -3,12 +3,11 @@ var should = require( 'should' ),
     flick = require( '..' );
 
 describe( 'flick()', function() {
-  it( 'should return a function with "handle", "use", "repository" and "stack" properties', function() {
+  it( 'should return a function with "handle", "use", and "stack" properties', function() {
     var handler = flick();
     handler.should.be.a( 'function' ).with.lengthOf( 3 );
     handler.should.have.property( 'handle' );
     handler.should.have.property( 'use' );
-    handler.should.have.property( 'repository' );
     handler.should.have.property( 'stack' );
   } );
   describe( 'handler.use( repository, fn )', function() {

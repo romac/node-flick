@@ -16,8 +16,7 @@ function createHandler()
     }
 
     utils.merge( handler, proto );
-
-    handler.repository = '*';
+    
     handler.stack = [];
 
     return handler;
