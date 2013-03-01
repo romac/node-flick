@@ -1,7 +1,5 @@
 
-var fs = require( 'fs' ),
-    basename = require( 'path' ).basename,
-    proto = require( './lib/handler' ),
+var proto = require( './lib/handler' ),
     utils = require( './utils' ),
     payload = require( './lib/payload' );
     whitelist = require( './lib/whitelist' );
