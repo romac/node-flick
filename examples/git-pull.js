@@ -11,6 +11,8 @@ function gitPull( root, options )
 {
     return function( req, res, next )
     {
+        console.log( '[flick] Web hook called.' );
+        
         var cmd = 'git pull' + ( options.rebase ? ' --rebase' : '' );
 
         shell.cd( root );
