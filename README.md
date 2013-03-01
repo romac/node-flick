@@ -20,7 +20,7 @@ First, import everything we need (this assumes that you installed node-flick via
 var connect = require( 'connect' ),
     shell = require( 'shelljs' ),
     flick = require( 'flick' ),
-    handler = flick(),
+    handler = flick( { whitelist: { local: true } } ),
     app = connect();
 ```
 
@@ -51,13 +51,8 @@ handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: t
 Let's then configure connect.
 
 ```js
+// Parse body of POST requests
 app.use( connect.bodyParser() );
-
-// Ensure only requests from GitHub (or, in that case, the same computer) will get processed.
-app.use( flick.whitelist( { local: true } ) );
-
-// Parse the payload we get from GitHub
-app.use( flick.payload() );
 
 // Supply it to node-flick's handler
 app.use( handler );
