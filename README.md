@@ -20,7 +20,7 @@ First, import everything we need (this assumes that you installed node-flick via
 var connect = require( 'connect' ),
     shell = require( 'shelljs' ),
     flick = require( 'flick' ),
-    handler = flick( { whitelist: { local: true } } ),
+    handler = flick(),
     app = connect();
 ```
 
@@ -45,7 +45,7 @@ function gitPull( root, options )
 Tell node-flick to run that action everytime we receive a notification for a specific repository.
 
 ```js
-handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: true } ) );
+handler.use( 'your-username/a-repository', gitPull( '/path/to/working-copy', { rebase: true } ) );
 ```
 
 Let's then configure connect.
@@ -55,6 +55,8 @@ Let's then configure connect.
 app.use( connect.bodyParser() );
 
 // Supply it to node-flick's handler
+app.use( flick.whitelist( { local: true } ) );
+app.use( flick.payload() );
 app.use( handler );
 ```
 
