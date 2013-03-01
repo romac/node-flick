@@ -19,21 +19,23 @@ describe( 'flick()', function() {
       var handler = flick(),
           fn = function() {};
       handler.use( 'repo_name', fn );
-      handler.stack[ 0 ].should.be.a( 'object' );
-      handler.stack[ 0 ].should.have.property( 'repository' );
-      handler.stack[ 0 ].should.have.property( 'handle' );
-      handler.stack[ 0 ].repository.should.be.equal( 'repo_name' );
-      handler.stack[ 0 ].handle.should.be.equal( fn );
+      var last = handler.stack[ handler.stack.length - 1 ];
+      last.should.be.a( 'object' );
+      last.should.have.property( 'repository' );
+      last.should.have.property( 'handle' );
+      last.repository.should.be.equal( 'repo_name' );
+      last.handle.should.be.equal( fn );
     } );
     it( 'should accept only a function', function() {
       var handler = flick(),
           fn = function() {};
       handler.use( fn );
-      handler.stack[ 0 ].should.be.a( 'object' );
-      handler.stack[ 0 ].should.have.property( 'repository' );
-      handler.stack[ 0 ].should.have.property( 'handle' );
-      handler.stack[ 0 ].repository.should.be.equal( '*' );
-      handler.stack[ 0 ].handle.should.be.equal( fn );
+      var last = handler.stack[ handler.stack.length - 1 ];
+      last.should.be.a( 'object' );
+      last.should.have.property( 'repository' );
+      last.should.have.property( 'handle' );
+      last.repository.should.be.equal( '*' );
+      last.handle.should.be.equal( fn );
     } );
   } );
   describe( 'handler.handle( req, res, next )', function() {
