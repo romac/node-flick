@@ -22,9 +22,10 @@ function gitPull( root, options )
     };
 }
 
-// tell Flick to run that action everytime we receive a notification for a specific repository.
+// Tell Flick to run that action everytime we receive a notification for a specific repository.
 handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: true } ) );
 
+// Let's parse POST body.
 app.use( connect.bodyParser() );
 
 // Supply it to Flick's handler
