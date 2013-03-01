@@ -22,19 +22,7 @@ function createHandler()
     return handler;
 }
 
-function defaultHandler( options )
-{
-    options = options || {};
-
-    var handler = createHandler();
-
-    handler.use( whitelist( options.whitelist ) );
-    handler.use( payload( options.payload ) );
-
-    return handler;
-}
-
-exports = module.exports = defaultHandler;
+exports = module.exports = createHandler;
 
 exports.payload = payload;
 exports.whitelist = whitelist;
