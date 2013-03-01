@@ -3,7 +3,7 @@
 var connect = require( 'connect' ),
     shell = require( 'shelljs' ),
     flick = require( '..' ),
-    handler = flick(),
+    handler = flick( { whitelist: { local: true } } ),
     app = connect();
 
 // Then, define the action to run once we'll receive the notification from GitHub.
@@ -26,12 +26,6 @@ function gitPull( root, options )
 handler.use( 'romac/romac.github.com', gitPull( '/var/www/romac.me', { rebase: true } ) );
 
 app.use( connect.bodyParser() );
-
-// Ensure only requests from GitHub or, in that case, the same computer will get processed.
-app.use( flick.whitelist( { local: true } ) );
-
-// Parse the payload we get from GitHub
-app.use( flick.payload() );
 
 // Supply it to Flick's handler
 app.use( handler );
