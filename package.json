@@ -16,7 +16,9 @@
   "author": "Romain Ruetschi (romain.ruetschi@gmail.com)",
   "license": "MIT",
   "readmeFilename": "README.md",
-  "dependencies": {},
+  "dependencies": {
+    "netmask": "0.0.2"
+  },
   "devDependencies": {
     "mocha": "*",
     "should": "*",

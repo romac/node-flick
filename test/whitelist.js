@@ -33,7 +33,7 @@ describe( 'whitelist', function() {
     describe( 'whitelist()( req, res, next )', function() {
         var req = function( type ) {
             var addresses = {
-                known: whitelist.knownRemotes[ 0 ],
+                known: '207.97.227.253',
                 unknown: '10.32.1.43',
                 local: '127.0.0.1'
             },
