@@ -17,7 +17,7 @@ function _nextErr( done )
         err.should.be.an.instanceOf( Error );
 
         should.exist( err.status );
-        err.status.should.equal( 403 );
+        err.status.should.equal( 401 );
 
         done();
     };
