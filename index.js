@@ -1,7 +1,9 @@
 
+"use strict";
+
 var proto = require( './lib/handler' ),
     utils = require( './utils' ),
-    payload = require( './lib/payload' );
+    payload = require( './lib/payload' ),
     whitelist = require( './lib/whitelist' );
 
 // All of this is obviously inspired by connect: https://github.com/senchalabs/connect

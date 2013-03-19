@@ -1,4 +1,6 @@
 
+"use strict";
+
 exports.merge = function( a, b )
 {
     for( var key in b ) {
