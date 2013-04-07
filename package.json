@@ -1,6 +1,6 @@
 {
   "name": "flick",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "GitHub post-receive hooks handler",
   "main": "index.js",
   "repository": {
