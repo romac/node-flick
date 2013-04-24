@@ -1,5 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/romac/node-flick.png?branch=master)](https://travis-ci.org/romac/node-flick)
-
+[![Dependencies Status](https://david-dm.org/romac/node-flick.png)](https://david-dm.org/romac/node-flick)
 # node-flick
 
 node-flick is a [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks) handler for Node.js.
