@@ -17,9 +17,9 @@ Let's say you want to run `git pull --rebase` on a repository clone every time c
 First, import everything we need (this assumes that you installed node-flick via the above command).
 
 ```js
-var connect = require( 'connect' ),
-    shell = require( 'shelljs' ),
-    flick = require( 'flick' ),
+var connect = require('connect'),
+    shell = require('shelljs'),
+    flick = require('flick'),
     handler = flick(),
     app = connect();
 ```
@@ -27,15 +27,15 @@ var connect = require( 'connect' ),
 Then, define the action to run once we'll receive the notification from GitHub.
 
 ```js
-function gitPull( root, options )
+function gitPull(root, options)
 {
-    return function( req, res, next ) {
-        var cmd = 'git pull' + ( options.rebase ? ' --rebase' : '' );
+    return function(req, res, next) {
+        var cmd = 'git pull' + (options.rebase ? ' --rebase' : '');
 
-        shell.cd( root );
-        shell.exec( cmd, function( code, output ) {
-            console.log( cmd + ' exited with code ' + code );
-        } );
+        shell.cd(root);
+        shell.exec(cmd, function(code, output) {
+            console.log(cmd + ' exited with code ' + code);
+        });
 
         next();
     };
@@ -45,32 +45,32 @@ function gitPull( root, options )
 Tell node-flick to run that action everytime we receive a notification for a specific repository.
 
 ```js
-handler.use( 'your-username/a-repository', gitPull( '/path/to/working-copy', { rebase: true } ) );
+handler.use('your-username/a-repository', gitPull('/path/to/working-copy', { rebase: true }));
 ```
 
 Let's then configure connect.
 
 ```js
 // Parse body of POST requests
-app.use( connect.bodyParser() );
+app.use(connect.bodyParser());
 
 // Supply it to node-flick's handler
-app.use( flick.whitelist( { local: true } ) );
-app.use( flick.payload() );
-app.use( handler );
+app.use(flick.whitelist({ local: true }));
+app.use(flick.payload());
+app.use(handler);
 ```
 
 Launch the HTTP server.
 
 ```js
 // Thank GitHub for their niceness
-app.use( function( req, res ) {
-    res.writeHead( 200 );
-    res.end( 'Thank you, dear friend.\n' );
-} );
+app.use(function(req, res) {
+    res.writeHead(200);
+    res.end('Thank you, dear friend.\n');
+});
 
-app.listen( 4001 );
-console.log( 'flick is listening on port 4001' );
+app.listen(4001);
+console.log('flick is listening on port 4001');
 ```
 
 Now, run the app with

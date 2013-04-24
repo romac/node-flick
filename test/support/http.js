@@ -1,2 +1,2 @@
 
-module.exports = require( 'supertest' );
+module.exports = require('supertest');
