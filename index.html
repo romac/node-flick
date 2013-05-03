@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>node-flick by romac</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>node-flick</h1>
+        <p>Post-receive hooks handler for Node.js.</p>
+
+        <p class="view"><a href="https://github.com/romac/node-flick">View the Project on GitHub <small>romac/node-flick</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/romac/node-flick/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/romac/node-flick/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/romac/node-flick">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="https://travis-ci.org/romac/node-flick"><img src="https://secure.travis-ci.org/romac/node-flick.png?branch=master" alt="Build Status"></a>
+<a href="https://david-dm.org/romac/node-flick"><img src="https://david-dm.org/romac/node-flick.png" alt="Dependencies Status"></a></p>
+
+<h1>node-flick</h1>
+
+<p>node-flick is a <a href="https://help.github.com/articles/post-receive-hooks">GitHub post-receive hooks</a> handler for Node.js.</p>
+
+<h2>Installation</h2>
+
+<p>Install the latest version by running</p>
+
+<pre><code>$ npm install flick
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>Let's say you want to run <code>git pull --rebase</code> on a repository clone every time commits are pushed to GitHub.</p>
+
+<p>First, import everything we need (this assumes that you installed node-flick via the above command).</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">connect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'connect'</span><span class="p">),</span>
+    <span class="nx">shell</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'shelljs'</span><span class="p">),</span>
+    <span class="nx">flick</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'flick'</span><span class="p">),</span>
+    <span class="nx">app</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">();</span>
+</pre></div>
+
+<p>Then, define the action to run once we'll receive the notification from GitHub.</p>
+
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">gitPull</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">cmd</span> <span class="o">=</span> <span class="s1">'git pull'</span> <span class="o">+</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">rebase</span> <span class="o">?</span> <span class="s1">' --rebase'</span> <span class="o">:</span> <span class="s1">''</span><span class="p">);</span>
+
+        <span class="nx">shell</span><span class="p">.</span><span class="nx">cd</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+        <span class="nx">shell</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">cmd</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">code</span><span class="p">,</span> <span class="nx">output</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">+</span> <span class="s1">' exited with code '</span> <span class="o">+</span> <span class="nx">code</span><span class="p">);</span>
+        <span class="p">});</span>
+
+        <span class="nx">next</span><span class="p">();</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Tell node-flick to run that action everytime we receive a notification for a specific repository.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">flick</span><span class="p">();</span>
+
+<span class="nx">handler</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'your-username/a-repository'</span><span class="p">,</span> <span class="nx">gitPull</span><span class="p">(</span><span class="s1">'/path/to/working-copy'</span><span class="p">,</span> <span class="p">{</span> <span class="nx">rebase</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}));</span>
+</pre></div>
+
+<p>Let's then configure connect.</p>
+
+<div class="highlight"><pre><span class="c1">// Parse body of POST requests</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">connect</span><span class="p">.</span><span class="nx">bodyParser</span><span class="p">());</span>
+
+<span class="c1">// Hook flick with express</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">flick</span><span class="p">.</span><span class="nx">whitelist</span><span class="p">({</span> <span class="nx">local</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">flick</span><span class="p">.</span><span class="nx">payload</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">handler</span><span class="p">);</span>
+</pre></div>
+
+<p>Launch the HTTP server.</p>
+
+<div class="highlight"><pre><span class="c1">// Thank GitHub for their niceness</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Thank you, dear friend.\n'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">4001</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'flick is listening on port 4001'</span><span class="p">);</span>
+</pre></div>
+
+<p>Now, run the app with</p>
+
+<pre><code>$ node update.js
+</code></pre>
+
+<p>And configure the endpoint in your repository settings on GitHub, under the <strong>WebHooks</strong> section.</p>
+
+<p>From now on, everytime you will push something to GitHub, the handler above will be triggered and the repository clone on the server will get updated.</p>
+
+<h2>Documentation</h2>
+
+<p>node-flick works very much like express. In fact, its API is a lot like express' one:</p>
+
+<h3>flick()</h3>
+
+<p>Create a middleware for express.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">),</span>
+    <span class="nx">flick</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'flick'</span><span class="p">),</span>
+    <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">(),</span>
+    <span class="nx">handler</span> <span class="o">=</span> <span class="nx">flick</span><span class="p">();</span>
+
+<span class="nx">handler</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Got a WebHook!'</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/webhook'</span><span class="p">,</span> <span class="nx">handler</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+</pre></div>
+
+<h3>flick.whitelist([options])</h3>
+
+<p>Create a middleware for express, that makes sure that the incoming request comes from GitHub.<br>
+It takes an optional object argument with can hold the following properties:</p>
+
+<ul>
+<li>
+<code>known</code> Check the request's remote IP against the known GitHub IPs. Defaults to <code>true</code>.</li>
+<li>
+<code>ips</code> An array of allowed IPs, that will be merged with GitHub's known IPs if <code>known</code> is enabled. Defaults to <code>[]</code>.</li>
+<li>
+<code>local</code> Allow requests from the local machine. It's basically a shortcut for <code>ips: ['127.0.0.1']</code>. Defaults to <code>false</code>.</li>
+</ul><div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">),</span>
+    <span class="nx">flick</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'flick'</span><span class="p">),</span>
+    <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">(),</span>
+    <span class="nx">handler</span> <span class="o">=</span> <span class="nx">flick</span><span class="p">();</span>
+
+<span class="nx">handler</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Got a WebHook!'</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/webhook'</span><span class="p">,</span> <span class="nx">flick</span><span class="p">.</span><span class="nx">whitelist</span><span class="p">({</span> <span class="nx">known</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">ips</span><span class="o">:</span> <span class="p">[</span><span class="s1">'192.168.1.23'</span><span class="p">],</span> <span class="nx">local</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/webhook'</span><span class="p">,</span> <span class="nx">handler</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+</pre></div>
+
+<h3>flick.payload([name])</h3>
+
+<p>Create a middleware for express, that checks if the payload sent by GitHub is there, parse it, and assign it to <code>req.flick.payload</code>.<br>
+You don't have to use it, but it's quite handy to avoid doing that check and calling <code>JSON.parse</code> on <code>req.body.payload</code> manually.</p>
+
+<p>Takes an optional argument holding the name of the POST body field that holds the payload. Defaults to <code>payload</code>, which is what GitHub uses.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">),</span>
+    <span class="nx">flick</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'flick'</span><span class="p">),</span>
+    <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">(),</span>
+    <span class="nx">handler</span> <span class="o">=</span> <span class="nx">flick</span><span class="p">();</span>
+
+<span class="nx">handler</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">repository</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">flick</span><span class="p">.</span><span class="nx">payload</span><span class="p">.</span><span class="nx">repository</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Got WebHook for %s/%s'</span><span class="p">,</span> <span class="nx">repository</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">repository</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/webhook'</span><span class="p">,</span> <span class="nx">flick</span><span class="p">.</span><span class="nx">whitelist</span><span class="p">({</span><span class="nx">local</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/webhook'</span><span class="p">,</span> <span class="nx">flick</span><span class="p">.</span><span class="nx">payload</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/webhook'</span><span class="p">,</span> <span class="nx">handler</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+</pre></div>
+
+<h3>handler.use([repo], fn)</h3>
+
+<p>Use the given handler <code>fn(req, res, next)</code> with optional <code>repo</code>, whose form is <code>username/repository</code>, defaulting to <code>*</code>.  </p>
+
+<p><code>req</code> represents the current HTTP request. It's the same object that express would give us, only augmented with a <code>flick</code> property which is an object with for now only one property <code>payload</code>, holding the payload GitHub sent us.  </p>
+
+<p><code>res</code> represents the current HTTP response. It's exactly the same object that express would give us.  </p>
+
+<p>Calling <code>next</code> will call the next flick handler, or give the control back to express if there aren't any.</p>
+
+<p>Say you want to log to the console whenever a WebHook is fired, for any repository this hook is configured for:</p>
+
+<div class="highlight"><pre><span class="nx">handler</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">repository</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">flick</span><span class="p">.</span><span class="nx">payload</span><span class="p">.</span><span class="nx">repository</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Got WebHook for %s/%s'</span><span class="p">,</span> <span class="nx">repository</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">repository</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Or maybe you only want to do that for a specific repository:</p>
+
+<div class="highlight"><pre><span class="nx">handler</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'romac/node-houdini'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Got WebHook for Houdini!'</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>License</h2>
+
+<p>node-flick is released under the <a href="http://romac.mit-license.org">MIT License</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/romac">romac</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-21073895-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
