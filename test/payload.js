@@ -85,6 +85,21 @@ describe('payload', function() {
 
             _payload(req, res, next);
         });
+
+        it('should set a "flick.payload" property on the request, holding GitHub\'s payload', function(done)
+        {
+            var _payload = payload(),
+                req = { method: 'POST', body: { payload: '"Hello, World"' } },
+                next = function(err) {
+                    should.exist(req.flick);
+                    should.exist(req.flick.payload);
+                    req.flick.payload.should.equal('Hello, World');
+
+                    done();
+                };
+
+            _payload(req, res, next);
+        });
     });
 
 });
