@@ -38,13 +38,15 @@ describe('flick()', function() {
       last.handle.should.be.equal(fn);
     });
   });
-  describe('handler.handle(req, res, next)', function() {
+  describe('handler.handle(req, res, next, done)', function() {
     function _req(owner, repo) {
       return {
-        payload: {
-          repository: {
-            owner: { name: owner },
-            name: repo
+        flick: {
+          payload: {
+            repository: {
+              owner: { name: owner },
+              name: repo
+            }
           }
         }
       };
@@ -71,7 +73,7 @@ describe('flick()', function() {
       var handler = flick(),
           req = _req('romac', 'node-flick');
 
-      handler.use('romac/node-flick', function() { done(); });
+      handler.use('romac/node-flick', function(req, res, next) { next(); });
       handler.handle(req, {}, done);
     });
     it('should not call an non-matching handler', function(done) {
@@ -82,6 +84,44 @@ describe('flick()', function() {
         should.fail('this handler should not be called.');
       });
       handler.handle(req, {}, done);
+    });
+    it('should take a `next` argument that forward to the next flick handler', function(done) {
+      var handler = flick(),
+          req = _req('romac', 'node-flick');
+
+      handler.use(function(req, res, next) {
+        req.firstHandlerCalled = true;
+        next();
+      });
+      handler.use(function(req, res, next) {
+        should.exist(req.firstHandlerCalled);
+        req.firstHandlerCalled.should.equal(true);
+        
+        req.secondHandlerCalled = true;
+        
+        next();
+      });
+      handler.handle(req, {}, function() {
+        should.exist(req.firstHandlerCalled);
+        req.firstHandlerCalled.should.equal(true);
+
+        should.exist(req.secondHandlerCalled);
+        req.secondHandlerCalled.should.equal(true);
+        
+        done();
+      });
+    });
+    it('should take a `done` argument that forward to the next express handler', function(_done) {
+      var handler = flick(),
+          req = _req('romac', 'node-flick');
+
+      handler.use(function(req, res, next, done) {
+        done();
+      });
+      handler.use(function() {
+        should.fail('this handler should not be called.');
+      });
+      handler.handle(req, {}, _done);
     });
   });
 });
