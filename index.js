@@ -4,7 +4,8 @@
 var proto = require('./lib/handler'),
     utils = require('./utils'),
     payload = require('./lib/payload'),
-    whitelist = require('./lib/whitelist');
+    whitelist = require('./lib/whitelist'),
+    github = require('./lib/github');
 
 // All of this is obviously inspired by connect: https://github.com/senchalabs/connect
 // Since flick integrates with it, I figured it'd be a good idea
@@ -25,3 +26,4 @@ function createHandler()
 exports = module.exports = createHandler;
 exports.payload = payload;
 exports.whitelist = whitelist;
+exports.github = github;

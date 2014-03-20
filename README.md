@@ -56,7 +56,7 @@ Let's then configure connect.
 app.use(connect.bodyParser());
 
 // Hook flick with express
-app.use(flick.whitelist({ local: true }));
+app.use(flick.secret(process.env.GITHUB_SECRET));
 app.use(flick.payload());
 app.use(handler);
 ```
@@ -105,11 +105,35 @@ app.use('/webhook', handler);
 app.listen(3000);
 ```
 
-### flick.whitelist([options])
+### flick.github(secret)
 
 Create a middleware for express, that makes sure that the incoming request comes from GitHub.  
+It takes a single argument, which is the GitHub secret key that you configured in
+the "web" [service hook](http://developer.github.com/v3/repos/hooks/).
+
+```js
+var express = require('express'),
+    flick = require('flick'),
+    app = express(),
+    handler = flick();
+
+handler.use(function(req, res, next) {
+    console.log('Got a WebHook!');
+    next();
+});
+
+app.use('/webhook', flick.secret(process.env.GITHUB_SECRET));
+app.use('/webhook', handler);
+app.listen(3000);
+```
+
+### flick.whitelist([options])
+
+**If you want to make sure the request comes from GitHub, use flick.github() instead.**
+
+Create a middleware for express, that makes sure that the incoming request comes from a whitelisted IP.  
 It takes an optional object argument with can hold the following properties:
-* `known` Check the request's remote IP against the known GitHub IPs. Defaults to `true`.
+* `known` Check the request's remote IP against the known GitHub IPs. Defaults to `true`. (deprecated)
 * `ips` An array of allowed IPs, that will be merged with GitHub's known IPs if `known` is enabled. Defaults to `[]`.
 * `local` Allow requests from the local machine. It's basically a shortcut for `ips: ['127.0.0.1']`. Defaults to `false`.
 
@@ -148,7 +172,7 @@ handler.use(function(req, res, next) {
     next();
 });
 
-app.use('/webhook', flick.whitelist({local: true}));
+app.use('/webhook', flick.secret(process.env.GITHUB_SECRET));
 app.use('/webhook', flick.payload());
 app.use('/webhook', handler);
 app.listen(3000);
