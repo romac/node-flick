@@ -26,7 +26,7 @@ function _nextErr(done)
 describe('whitelist', function() {
     describe('whitelist()', function() {
         it('should return a function that takes 3 arguments when invoked', function() {
-            whitelist().should.be.a('function').with.lengthOf(3);
+            whitelist().should.be.a.Function.with.lengthOf(3);
         });
     });
 

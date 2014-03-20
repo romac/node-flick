@@ -1,6 +1,6 @@
 {
   "name": "flick",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "GitHub post-receive hooks handler",
   "main": "index.js",
   "repository": {
@@ -17,12 +17,12 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
-    "netmask": "0.0.2"
+    "netmask": "1.0.4"
   },
   "devDependencies": {
     "mocha": "*",
     "should": "*",
-    "supertest": "0.0.1"
+    "supertest": "*"
   },
   "scripts": {
     "prepublish": "npm prune",

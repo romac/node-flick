@@ -5,7 +5,7 @@ var should = require('should'),
 describe('flick()', function() {
   it('should return a function with "handle", "use", and "stack" properties', function() {
     var handler = flick();
-    handler.should.be.a('function').with.lengthOf(3);
+    handler.should.be.a.Function.with.lengthOf(3);
     handler.should.have.property('handle');
     handler.should.have.property('use');
     handler.should.have.property('stack');
@@ -13,14 +13,14 @@ describe('flick()', function() {
   describe('handler.use(repository, fn)', function() {
     it('should be a function and take 2 arguments', function() {
       var handler = flick();
-      handler.use.should.be.a('function').with.lengthOf(2);
+      handler.use.should.be.a.Function.with.lengthOf(2);
     });
     it('should populate the stack', function() {
       var handler = flick(),
           fn = function() {};
       handler.use('repo_name', fn);
       var last = handler.stack[ handler.stack.length - 1 ];
-      last.should.be.a('object');
+      last.should.be.a.Object;
       last.should.have.property('repository');
       last.should.have.property('handle');
       last.repository.should.be.equal('repo_name');
@@ -31,7 +31,7 @@ describe('flick()', function() {
           fn = function() {};
       handler.use(fn);
       var last = handler.stack[ handler.stack.length - 1 ];
-      last.should.be.a('object');
+      last.should.be.a.Object;
       last.should.have.property('repository');
       last.should.have.property('handle');
       last.repository.should.be.equal('*');
@@ -53,7 +53,7 @@ describe('flick()', function() {
     }
     it('should be a function and take 3 arguments', function() {
       var handler = flick();
-      handler.handle.should.be.a('function').with.lengthOf(3);
+      handler.handle.should.be.a.Function.with.lengthOf(3);
     });
     it('should abort if req.flick isn\'t set', function(done) {
       var handler = flick();
@@ -96,9 +96,9 @@ describe('flick()', function() {
       handler.use(function(req, res, next) {
         should.exist(req.firstHandlerCalled);
         req.firstHandlerCalled.should.equal(true);
-        
+
         req.secondHandlerCalled = true;
-        
+
         next();
       });
       handler.handle(req, {}, function() {
@@ -107,7 +107,7 @@ describe('flick()', function() {
 
         should.exist(req.secondHandlerCalled);
         req.secondHandlerCalled.should.equal(true);
-        
+
         done();
       });
     });

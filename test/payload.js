@@ -5,7 +5,7 @@ var should = require('should'),
 describe('payload', function() {
     describe('payload()', function() {
         it('should return a function that takes 3 arguments when invoked', function() {
-            payload().should.be.a('function').with.lengthOf(3);
+            payload().should.be.a.Function.with.lengthOf(3);
         });
     });
 

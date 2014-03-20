@@ -42,7 +42,7 @@ function sign(req, secret) {
 describe('github', function() {
     describe('github()', function() {
         it('should be a function that takes 1 argument', function() {
-            github.should.be.a('function').with.lengthOf(1);
+            github.should.be.a.Function.with.lengthOf(1);
         });
         it('should throw an error when the first argument is not a string', function() {
             (function() { github(); }).should.throw();
@@ -52,7 +52,7 @@ describe('github', function() {
             (function() { github(new Buffer('Hello')); }).should.throw();
         });
         it('should return a function that takes 3 arguments when invoked', function() {
-            github('GITHUB_SECRET').should.be.a('function').with.lengthOf(3);
+            github('GITHUB_SECRET').should.be.a.Function.with.lengthOf(3);
         });
     });
 
